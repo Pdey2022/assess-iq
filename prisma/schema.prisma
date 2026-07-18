@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User ──────────────────────────────────────────────────────────────────
+// Portal users who manage assessments
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      String   @default("editor")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Assessment Definition (Template) ──────────────────────────────────────
+// Defines an assessment type (e.g. "Security Audit", "Compliance Check")
+// with its questions, scoring logic, and recommendation knowledge base
+model AssessmentDefinition {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  // JSON array of questions: [{id, text, type, options?}]
+  questions   Json
+  // JSON object mapping answers/question IDs to point values
+  scoringLogic   Json
+  // JSON object with recommendation rules based on score thresholds / poor answers
+  knowledgeBase  Json
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  submissions    CustomerSubmission[]
+}
+
+// ─── Customer Submission ────────────────────────────────────────────────────
+// Tracks each individual assessment run
+model CustomerSubmission {
+  id              String           @id @default(cuid())
+  customerName    String
+  customerEmail   String?
+  status          SubmissionStatus @default(IN_PROGRESS)
+  // Unique token for external "magic link" access
+  uniqueLinkToken String?          @unique
+  // Reference to which assessment template was used
+  assessmentDefinitionId String
+  assessmentDefinition   AssessmentDefinition @relation(fields: [assessmentDefinitionId], references: [id])
+  // JSON object storing the customer's responses: {questionId: answer}
+  answers              Json?
+  // Calculated final score
+  finalScore           Float?
+  // Generated recommendation data (from knowledge base)
+  recommendationReport Json?
+  // URL to the generated PDF report (stored in Vercel Blob)
+  pdfUrl               String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+enum SubmissionStatus {
+  IN_PROGRESS
+  COMPLETED
+  DELIVERED
+}
