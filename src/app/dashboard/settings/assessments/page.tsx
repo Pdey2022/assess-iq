@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/require-auth";
+import type { AssessmentDefinition } from "@/generated/prisma/client";
 
 export default async function AssessmentsPage() {
   await requireAuth();
@@ -31,7 +32,7 @@ export default async function AssessmentsPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {assessments.map((a) => (
+          {assessments.map((a: AssessmentDefinition) => (
             <Link
               key={a.id}
               href={`/dashboard/settings/assessments/${a.id}`}
