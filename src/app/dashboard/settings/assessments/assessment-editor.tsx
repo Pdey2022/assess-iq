@@ -17,7 +17,11 @@ export type AssessmentData = {
   scoringLogic: Record<string, Record<string, number>>;
   knowledgeBase: {
     thresholds: { min: number; max: number; recommendation: string }[];
-    poorAnswers: { questionId: string; answer: string; recommendation: string }[];
+    poorAnswers: {
+      questionId: string;
+      answer: string;
+      recommendation: string;
+    }[];
   };
 };
 
@@ -34,7 +38,10 @@ function newQuestion(): Question {
     text: "",
     type: "radio",
     required: false,
-    options: [{ label: "Yes", value: "yes" }, { label: "No", value: "no" }],
+    options: [
+      { label: "Yes", value: "yes" },
+      { label: "No", value: "no" },
+    ],
   };
 }
 
@@ -42,15 +49,17 @@ const emptyKB = { thresholds: [], poorAnswers: [] };
 
 export default function AssessmentEditor({ initialData, onSave }: Props) {
   const [title, setTitle] = useState(initialData?.title ?? "");
-  const [description, setDescription] = useState(initialData?.description ?? "");
+  const [description, setDescription] = useState(
+    initialData?.description ?? "",
+  );
   const [questions, setQuestions] = useState<Question[]>(
-    initialData?.questions ?? []
+    initialData?.questions ?? [],
   );
   const [scoringLogic, setScoringLogic] = useState<
     Record<string, Record<string, number>>
   >(initialData?.scoringLogic ?? {});
   const [knowledgeBase, setKnowledgeBase] = useState(
-    initialData?.knowledgeBase ?? emptyKB
+    initialData?.knowledgeBase ?? emptyKB,
   );
   const [saving, setSaving] = useState(false);
 
@@ -67,7 +76,7 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
 
   function updateQuestion(id: string, patch: Partial<Question>) {
     setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, ...patch } : q))
+      prev.map((q) => (q.id === id ? { ...q, ...patch } : q)),
     );
   }
 
@@ -85,15 +94,15 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
                 },
               ],
             }
-          : q
-      )
+          : q,
+      ),
     );
   }
 
   function updateOption(
     questionId: string,
     index: number,
-    patch: Partial<{ label: string; value: string }>
+    patch: Partial<{ label: string; value: string }>,
   ) {
     setQuestions((prev) =>
       prev.map((q) =>
@@ -101,11 +110,11 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
           ? {
               ...q,
               options: q.options.map((opt, i) =>
-                i === index ? { ...opt, ...patch } : opt
+                i === index ? { ...opt, ...patch } : opt,
               ),
             }
-          : q
-      )
+          : q,
+      ),
     );
   }
 
@@ -114,16 +123,12 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
       prev.map((q) =>
         q.id === questionId
           ? { ...q, options: q.options.filter((_, i) => i !== index) }
-          : q
-      )
+          : q,
+      ),
     );
   }
 
-  function setScore(
-    questionId: string,
-    optionValue: string,
-    score: number
-  ) {
+  function setScore(questionId: string, optionValue: string, score: number) {
     setScoringLogic((prev) => ({
       ...prev,
       [questionId]: { ...prev[questionId], [optionValue]: score },
@@ -142,12 +147,12 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
 
   function updateThreshold(
     index: number,
-    patch: Partial<{ min: number; max: number; recommendation: string }>
+    patch: Partial<{ min: number; max: number; recommendation: string }>,
   ) {
     setKnowledgeBase((prev) => ({
       ...prev,
       thresholds: prev.thresholds.map((t, i) =>
-        i === index ? { ...t, ...patch } : t
+        i === index ? { ...t, ...patch } : t,
       ),
     }));
   }
@@ -231,16 +236,14 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
 
         {questions.length === 0 && (
           <p className="text-sm text-gray-400">
-            No questions yet. Click &quot;+ Add Question&quot; to start building.
+            No questions yet. Click &quot;+ Add Question&quot; to start
+            building.
           </p>
         )}
 
         <div className="space-y-4">
           {questions.map((q, idx) => (
-            <div
-              key={q.id}
-              className="rounded-lg border p-4"
-            >
+            <div key={q.id} className="rounded-lg border p-4">
               <div className="mb-3 flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase text-gray-400">
                   Question {idx + 1}
@@ -270,7 +273,8 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
                     updateQuestion(q.id, {
                       type: e.target.value as Question["type"],
                       options:
-                        e.target.value === "text" || e.target.value === "textarea"
+                        e.target.value === "text" ||
+                        e.target.value === "textarea"
                           ? []
                           : q.options.length > 0
                             ? q.options
@@ -382,12 +386,17 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
 
         <div className="space-y-3">
           {knowledgeBase.thresholds.map((t, i) => (
-            <div key={i} className="flex items-start gap-3 rounded-lg border p-3">
+            <div
+              key={i}
+              className="flex items-start gap-3 rounded-lg border p-3"
+            >
               <div className="flex gap-2">
                 <input
                   type="number"
                   value={t.min}
-                  onChange={(e) => updateThreshold(i, { min: Number(e.target.value) })}
+                  onChange={(e) =>
+                    updateThreshold(i, { min: Number(e.target.value) })
+                  }
                   placeholder="Min"
                   className="w-16 rounded border border-gray-300 px-2 py-1 text-sm"
                 />
@@ -395,14 +404,18 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
                 <input
                   type="number"
                   value={t.max}
-                  onChange={(e) => updateThreshold(i, { max: Number(e.target.value) })}
+                  onChange={(e) =>
+                    updateThreshold(i, { max: Number(e.target.value) })
+                  }
                   placeholder="Max"
                   className="w-16 rounded border border-gray-300 px-2 py-1 text-sm"
                 />
               </div>
               <input
                 value={t.recommendation}
-                onChange={(e) => updateThreshold(i, { recommendation: e.target.value })}
+                onChange={(e) =>
+                  updateThreshold(i, { recommendation: e.target.value })
+                }
                 placeholder="Recommendation text..."
                 className="flex-1 rounded border border-gray-300 px-2 py-1 text-sm"
               />

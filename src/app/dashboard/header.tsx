@@ -12,11 +12,14 @@ export default async function DashboardHeader() {
           AssessIQ
         </Link>
         <nav className="flex gap-4 text-sm">
+          <Link href="/dashboard" className="text-gray-600 hover:text-gray-900">
+            Dashboard
+          </Link>
           <Link
-            href="/dashboard"
+            href="/dashboard/assessments"
             className="text-gray-600 hover:text-gray-900"
           >
-            Dashboard
+            Assessments
           </Link>
           <Link
             href="/dashboard/settings/assessments"
@@ -27,9 +30,7 @@ export default async function DashboardHeader() {
         </nav>
       </div>
       <div className="flex items-center gap-4">
-        <span className="text-sm text-gray-600">
-          {session?.user?.name}
-        </span>
+        <span className="text-sm text-gray-600">{session?.user?.name}</span>
         <SignOutButton />
       </div>
     </header>

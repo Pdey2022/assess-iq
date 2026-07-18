@@ -28,7 +28,9 @@ export default async function AssessmentsPage() {
 
       {assessments.length === 0 ? (
         <div className="rounded-lg border border-dashed p-12 text-center">
-          <p className="text-gray-500">No assessments yet. Create your first one!</p>
+          <p className="text-gray-500">
+            No assessments yet. Create your first one!
+          </p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -43,8 +45,8 @@ export default async function AssessmentsPage() {
                 <p className="mt-1 text-sm text-gray-500">{a.description}</p>
               )}
               <p className="mt-1 text-xs text-gray-400">
-                {(a.questions as any[])?.length ?? 0} questions
-                &middot; Created {new Date(a.createdAt).toLocaleDateString()}
+                {(a.questions as any[])?.length ?? 0} questions &middot; Created{" "}
+                {new Date(a.createdAt).toLocaleDateString()}
               </p>
             </Link>
           ))}
