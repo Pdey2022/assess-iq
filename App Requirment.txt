@@ -1,0 +1,70 @@
+Here is a detailed, structured rewrite of your requirements. It translates your vision into a clean "Product Requirement Document" format that you can feed directly into GitHub Copilot to generate your code, database schemas, and folder structures without adding unnecessary complexity.
+
+---
+
+## 1. Core Workflow & Assessment Engine
+
+* **Assessment Templates:** The system must support multiple independent assessment types (e.g., Security Audit, Compliance Check). Each template defines its own unique set of questions.
+* **Dynamic Form Inputs:** When building or editing an assessment, the admin can choose different input types for each question:
+* Text input / Text area
+* Dropdown selection
+* Radio buttons / Checkboxes
+
+
+* **Scoring & Knowledge Base Engine:** Every answer option can be assigned a weight or point value. The system aggregates these points to calculate a final score.
+* **Automated Recommendations:** Based on the final score thresholds or specific "poor" answers, the system cross-references a built-in *Knowledge Base* to automatically append tailored recommendations and best-practice advice to the final report.
+* **PDF Generation:** Once an assessment is finished, the portal compiles the scores, answers, and tailored recommendations into a clean, stylized PDF report available for download.
+
+---
+
+## 2. Assessment Launch & Distribution Modes
+
+When a portal user launches a new assessment, they must be presented with two distinct workflows:
+
+* **Mode A: Internal Capture (On-Behalf)**
+* The user inputs the customer's name.
+* The portal immediately loads the questionnaire on-screen.
+* The internal user interviews the client, fills out the answers directly, and completes it.
+
+
+* **Mode B: External Link (Self-Service)**
+* The user inputs the customer's name and email address.
+* The system generates a unique, secure, unauthenticated "magic link" (token-based URL) and emails it to the customer.
+* The customer can open the link and fill out the questionnaire in their own time.
+
+
+
+---
+
+## 3. Navigation Panes & Status Tracking
+
+The navigation sidebar relies on a clear lifecycle to track every assessment submission:
+
+* **Assessments Dropdown:**
+* **Active Tab:** Displays all active, master assessment templates available to be launched.
+* **In-Progress Tab:** Displays all ongoing submissions—both internal drafts currently being filled out and external magic links sent to customers that haven't been submitted yet.
+* **Delivered Tab:** Displays all finalized assessments. This is where the final scores are saved, and the generated PDF reports can be viewed or downloaded.
+
+
+
+---
+
+## 4. Settings & Administrative Control
+
+The settings panel is a centralized workspace to manage the portal's behavior:
+
+* **Assessment Customizer:** A UI to add new assessment templates, edit existing questions, change input types, alter scoring logic weights, and update the recommendation knowledge base.
+* **Report Style Manager:** A simple interface to configure the layout and design elements of the generated PDF report (e.g., updating the company logo, primary brand colors, header/footer text).
+* **User Management:** A simple registry to manage system users.
+
+---
+
+## 💡 What Was Missing (Added for Completeness)
+
+To ensure your app runs smoothly without hitting roadblocks later, a few minor but vital details have been explicitly added:
+
+* **Data Isolation (Global Visibility):** Explicitly stating the permissions model. Every authorized user has full read/write access to see, launch, edit, and download assessments across all customers, regardless of which team member created it.
+* **Saved State Persistence:** Ensuring that if a customer or internal user closes their browser halfway through an assessment, their answers are auto-saved to the Neon database so they can pick up right where they left off.
+* **Token Expiration/Security:** Ensuring that the external "magic links" sent to clients are securely tied to a unique database token so random users can't stumble onto customer data.
+
+Would you like to use this detailed text to generate the database schema matching this exact workflow next?
