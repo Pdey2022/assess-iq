@@ -42,9 +42,17 @@ export function calculateScore(
       questionMax = 0;
     } else {
       // Compute max possible for this question
-      questionMax = Object.values(logic).reduce((sum, v) => {
-        return typeof v === "number" ? Math.max(sum, v) : sum;
-      }, 0);
+      if (q.type === "checkbox") {
+        // For checkboxes, max is sum of all positive option scores
+        questionMax = Object.values(logic).reduce((sum, v) => {
+          return typeof v === "number" && v > 0 ? sum + v : sum;
+        }, 0);
+      } else {
+        // For radio/dropdown, max is the highest single option
+        questionMax = Object.values(logic).reduce((sum, v) => {
+          return typeof v === "number" ? Math.max(sum, v) : sum;
+        }, 0);
+      }
 
       if (answer) {
         if (Array.isArray(answer)) {
@@ -69,9 +77,10 @@ export function calculateScore(
     });
   }
 
-  const percentage = maxPossibleScore > 0
+  const rawPct = maxPossibleScore > 0
     ? Math.round((totalScore / maxPossibleScore) * 100)
     : 0;
+  const percentage = Math.min(rawPct, 100);
 
   const recommendation = getRecommendation(percentage, knowledgeBase, questions, answers, scoringLogic);
 

@@ -73,7 +73,7 @@ export default function AssessmentForm({
   if (submitted) {
     const score = result?.score ?? 0;
     const maxScore = result?.maxScore ?? 0;
-    const pct = result?.percentage ?? 0;
+    const pct = Math.min(result?.percentage ?? 0, 100);
     const rec = result?.recommendation ?? "";
     const breakdown = result?.breakdown ?? [];
 
