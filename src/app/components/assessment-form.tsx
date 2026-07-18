@@ -111,14 +111,15 @@ export default function AssessmentForm({
           <h3 className="mb-3 font-semibold">Question Breakdown</h3>
           <div className="space-y-2">
             {breakdown.map((b: any, i: number) => (
-              <div key={i} className="flex items-center justify-between rounded-lg border px-4 py-3">
+              <div
+                key={i}
+                className="flex items-center justify-between rounded-lg border px-4 py-3"
+              >
                 <div className="flex-1">
                   <p className="text-sm font-medium">
                     {i + 1}. {b.questionText}
                   </p>
-                  <p className="text-xs text-gray-500">
-                    Answer: {b.answer}
-                  </p>
+                  <p className="text-xs text-gray-500">Answer: {b.answer}</p>
                 </div>
                 <div className="ml-4 text-right">
                   <span className="text-sm font-semibold">

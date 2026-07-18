@@ -27,7 +27,9 @@ export default async function SubmissionDetailsPage({
 
   return (
     <div className="mx-auto max-w-3xl p-6">
-      <h1 className="text-2xl font-bold">{submission.assessmentDefinition.title}</h1>
+      <h1 className="text-2xl font-bold">
+        {submission.assessmentDefinition.title}
+      </h1>
       <p className="text-sm text-gray-500">
         Customer: {submission.customerName}
         {submission.customerEmail && ` (${submission.customerEmail})`}

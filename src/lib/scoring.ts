@@ -23,7 +23,9 @@ export function calculateScore(
   questions: Question[],
   answers: Record<string, any>,
   scoringLogic: Record<string, Record<string, number>>,
-  knowledgeBase: { thresholds?: { min: number; max: number; recommendation: string }[] }
+  knowledgeBase: {
+    thresholds?: { min: number; max: number; recommendation: string }[];
+  },
 ): ScoreResult {
   let totalScore = 0;
   let maxPossibleScore = 0;
@@ -77,22 +79,37 @@ export function calculateScore(
     });
   }
 
-  const rawPct = maxPossibleScore > 0
-    ? Math.round((totalScore / maxPossibleScore) * 100)
-    : 0;
+  const rawPct =
+    maxPossibleScore > 0
+      ? Math.round((totalScore / maxPossibleScore) * 100)
+      : 0;
   const percentage = Math.min(rawPct, 100);
 
-  const recommendation = getRecommendation(percentage, knowledgeBase, questions, answers, scoringLogic);
+  const recommendation = getRecommendation(
+    percentage,
+    knowledgeBase,
+    questions,
+    answers,
+    scoringLogic,
+  );
 
-  return { totalScore, maxPossibleScore, percentage, breakdown, recommendation };
+  return {
+    totalScore,
+    maxPossibleScore,
+    percentage,
+    breakdown,
+    recommendation,
+  };
 }
 
 function getRecommendation(
   percentage: number,
-  knowledgeBase: { thresholds?: { min: number; max: number; recommendation: string }[] },
+  knowledgeBase: {
+    thresholds?: { min: number; max: number; recommendation: string }[];
+  },
   questions: Question[],
   answers: Record<string, any>,
-  scoringLogic: Record<string, Record<string, number>>
+  scoringLogic: Record<string, Record<string, number>>,
 ): string {
   // Build recommendation from thresholds
   const thresholds = knowledgeBase?.thresholds ?? [];
@@ -112,7 +129,9 @@ function getRecommendation(
           for (const val of answer) {
             if ((logic[val] ?? 0) === 0) {
               const opt = q.options?.find((o) => o.value === val);
-              poorAnswers.push(`"${q.text}" — selected "${opt?.label ?? val}" (0 pts)`);
+              poorAnswers.push(
+                `"${q.text}" — selected "${opt?.label ?? val}" (0 pts)`,
+              );
             }
           }
         } else {
