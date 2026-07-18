@@ -20,7 +20,9 @@ export default async function FillAssessmentPage({
   return (
     <div className="mx-auto max-w-2xl p-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">{submission.assessmentDefinition.title}</h1>
+        <h1 className="text-2xl font-bold">
+          {submission.assessmentDefinition.title}
+        </h1>
         <p className="text-sm text-gray-500">
           Customer: {submission.customerName} &middot; Internal Assessment
         </p>

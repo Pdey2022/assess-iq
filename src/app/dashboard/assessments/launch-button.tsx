@@ -66,7 +66,9 @@ export default function LaunchButton({
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="mb-4 text-lg font-bold">Launch: {assessmentTitle}</h2>
+            <h2 className="mb-4 text-lg font-bold">
+              Launch: {assessmentTitle}
+            </h2>
 
             {/* Mode selector */}
             <div className="mb-4 flex gap-2">
@@ -133,13 +135,19 @@ export default function LaunchButton({
                     disabled={loading || !customerName.trim()}
                     className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
                   >
-                    {loading ? "Creating..." : mode === "internal" ? "Start Assessment" : "Generate Link"}
+                    {loading
+                      ? "Creating..."
+                      : mode === "internal"
+                        ? "Start Assessment"
+                        : "Generate Link"}
                   </button>
                 </div>
               </div>
             ) : (
               <div className="space-y-3">
-                <p className="text-sm text-green-600">✅ Magic link generated!</p>
+                <p className="text-sm text-green-600">
+                  ✅ Magic link generated!
+                </p>
                 <div className="flex gap-2">
                   <input
                     readOnly

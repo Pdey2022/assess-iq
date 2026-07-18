@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/require-auth";
 import Link from "next/link";
 import LaunchButton from "./launch-button";
+import SubmissionCard from "./submission-card";
 
 export default async function AssessmentsDashboardPage() {
   await requireAuth();
@@ -45,7 +46,9 @@ export default async function AssessmentsDashboardPage() {
           <div key={t.id} className="rounded-lg border p-4">
             <h3 className="font-semibold">{t.title}</h3>
             {t.description && (
-              <p className="mt-1 text-sm text-gray-500 line-clamp-2">{t.description}</p>
+              <p className="mt-1 text-sm text-gray-500 line-clamp-2">
+                {t.description}
+              </p>
             )}
             <p className="mt-2 text-xs text-gray-400">
               {(t.questions as any[])?.length ?? 0} questions
@@ -65,13 +68,40 @@ export default async function AssessmentsDashboardPage() {
           <div className="col-span-full rounded-lg border border-dashed p-12 text-center">
             <p className="text-gray-500">
               No assessments yet.{" "}
-              <Link href="/dashboard/settings/assessments/new" className="text-blue-600 underline">
+              <Link
+                href="/dashboard/settings/assessments/new"
+                className="text-blue-600 underline"
+              >
                 Create one
               </Link>
             </p>
           </div>
         )}
       </div>
+
+      {/* In-Progress Section */}
+      {inProgress.length > 0 && (
+        <div className="mt-10">
+          <h2 className="mb-4 text-lg font-semibold">In-Progress</h2>
+          <div className="space-y-3">
+            {inProgress.map((s) => (
+              <SubmissionCard key={s.id} submission={s} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Delivered Section */}
+      {delivered.length > 0 && (
+        <div className="mt-10">
+          <h2 className="mb-4 text-lg font-semibold">Delivered</h2>
+          <div className="space-y-3">
+            {delivered.map((s) => (
+              <SubmissionCard key={s.id} submission={s} showScore />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

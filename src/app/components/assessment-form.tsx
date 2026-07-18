@@ -34,8 +34,7 @@ export default function AssessmentForm({
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [score, setScore] = useState<number | null>(null);
-  const [recommendation, setRecommendation] = useState("");
+  const [result, setResult] = useState<any>(null);
 
   function updateAnswer(questionId: string, value: any) {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
@@ -49,59 +48,22 @@ export default function AssessmentForm({
     setAnswers((prev) => ({ ...prev, [questionId]: updated }));
   }
 
-  function calculateScore(): number {
-    let total = 0;
-    for (const q of questions) {
-      const answer = answers[q.id];
-      if (!answer) continue;
-      const logic = scoringLogic[q.id];
-      if (!logic) continue;
-
-      if (Array.isArray(answer)) {
-        for (const val of answer) {
-          total += logic[val] ?? 0;
-        }
-      } else {
-        total += logic[answer] ?? 0;
-      }
-    }
-    return total;
-  }
-
-  function getRecommendation(totalScore: number): string {
-    const thresholds = knowledgeBase?.thresholds ?? [];
-    for (const t of thresholds) {
-      if (totalScore >= t.min && totalScore <= t.max) {
-        return t.recommendation;
-      }
-    }
-    return "";
-  }
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
-
-    const totalScore = calculateScore();
-    const rec = getRecommendation(totalScore);
-    setScore(totalScore);
-    setRecommendation(rec);
 
     const url = token
       ? `/api/assess-by-token/${token}`
       : `/api/submissions/${submissionId}`;
 
-    await fetch(url, {
+    const res = await fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        answers,
-        status: "COMPLETED",
-        finalScore: totalScore,
-        recommendationReport: { score: totalScore, recommendation: rec },
-      }),
+      body: JSON.stringify({ answers, status: "COMPLETED" }),
     });
 
+    const data = await res.json();
+    setResult(data.recommendationReport);
     setSubmitted(true);
     setSubmitting(false);
 
@@ -109,24 +71,74 @@ export default function AssessmentForm({
   }
 
   if (submitted) {
+    const score = result?.score ?? 0;
+    const maxScore = result?.maxScore ?? 0;
+    const pct = result?.percentage ?? 0;
+    const rec = result?.recommendation ?? "";
+    const breakdown = result?.breakdown ?? [];
+
+    const getBarColor = (p: number) =>
+      p >= 70 ? "bg-green-500" : p >= 40 ? "bg-yellow-500" : "bg-red-500";
+
     return (
       <div className="space-y-6">
-        <div className="rounded-lg border border-green-200 bg-green-50 p-6 text-center">
-          <h2 className="text-xl font-bold text-green-800">✅ Assessment Completed!</h2>
-          {score !== null && (
-            <p className="mt-2 text-3xl font-bold text-green-700">{score} pts</p>
-          )}
-          {recommendation && (
-            <p className="mt-4 text-sm text-green-700">{recommendation}</p>
-          )}
+        {/* Score Card */}
+        <div className="rounded-lg border p-6 text-center">
+          <h2 className="text-xl font-bold">Assessment Results</h2>
+          <div className="mt-4 flex items-center justify-center gap-4">
+            <span className="text-5xl font-bold">{score}</span>
+            <span className="text-xl text-gray-400">/ {maxScore}</span>
+          </div>
+          <p className="mt-1 text-sm text-gray-500">{pct}% overall</p>
+          <div className="mx-auto mt-3 h-3 w-full max-w-xs rounded-full bg-gray-200">
+            <div
+              className={`h-3 rounded-full ${getBarColor(pct)}`}
+              style={{ width: `${pct}%` }}
+            />
+          </div>
         </div>
+
+        {/* Recommendation */}
+        {rec && (
+          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm whitespace-pre-line">
+            <strong>Recommendation:</strong>
+            <p className="mt-1 text-blue-800">{rec}</p>
+          </div>
+        )}
+
+        {/* Per-Question Breakdown */}
+        <div>
+          <h3 className="mb-3 font-semibold">Question Breakdown</h3>
+          <div className="space-y-2">
+            {breakdown.map((b: any, i: number) => (
+              <div key={i} className="flex items-center justify-between rounded-lg border px-4 py-3">
+                <div className="flex-1">
+                  <p className="text-sm font-medium">
+                    {i + 1}. {b.questionText}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Answer: {b.answer}
+                  </p>
+                </div>
+                <div className="ml-4 text-right">
+                  <span className="text-sm font-semibold">
+                    {b.score} / {b.maxScore}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {isInternal && (
-          <button
-            onClick={() => router.push("/dashboard/assessments")}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-          >
-            Back to Assessments
-          </button>
+          <div className="flex justify-end">
+            <button
+              onClick={() => router.push("/dashboard/assessments")}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+            >
+              Back to Assessments
+            </button>
+          </div>
         )}
       </div>
     );
@@ -142,8 +154,8 @@ export default function AssessmentForm({
           </p>
 
           {/* Text */}
-          {(q.type === "text" || q.type === "textarea") && (
-            q.type === "textarea" ? (
+          {(q.type === "text" || q.type === "textarea") &&
+            (q.type === "textarea" ? (
               <textarea
                 value={answers[q.id] ?? ""}
                 onChange={(e) => updateAnswer(q.id, e.target.value)}
@@ -157,14 +169,16 @@ export default function AssessmentForm({
                 onChange={(e) => updateAnswer(q.id, e.target.value)}
                 className="w-full rounded-lg border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
               />
-            )
-          )}
+            ))}
 
           {/* Radio */}
           {q.type === "radio" && (
             <div className="space-y-2">
               {q.options.map((opt) => (
-                <label key={opt.value} className="flex items-center gap-2 text-sm">
+                <label
+                  key={opt.value}
+                  className="flex items-center gap-2 text-sm"
+                >
                   <input
                     type="radio"
                     name={q.id}
@@ -183,7 +197,10 @@ export default function AssessmentForm({
           {q.type === "checkbox" && (
             <div className="space-y-2">
               {q.options.map((opt) => (
-                <label key={opt.value} className="flex items-center gap-2 text-sm">
+                <label
+                  key={opt.value}
+                  className="flex items-center gap-2 text-sm"
+                >
                   <input
                     type="checkbox"
                     checked={(answers[q.id] ?? []).includes(opt.value)}

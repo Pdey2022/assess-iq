@@ -5,25 +5,31 @@ import crypto from "crypto";
 
 export async function POST(req: Request) {
   const session = await auth();
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session?.user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
   const { assessmentDefinitionId, customerName, customerEmail, mode } = body;
 
   if (!assessmentDefinitionId || !customerName || !mode) {
-    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 },
+    );
   }
 
   const assessment = await prisma.assessmentDefinition.findUnique({
     where: { id: assessmentDefinitionId },
   });
   if (!assessment) {
-    return NextResponse.json({ error: "Assessment not found" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Assessment not found" },
+      { status: 404 },
+    );
   }
 
-  const uniqueLinkToken = mode === "external"
-    ? crypto.randomBytes(24).toString("hex")
-    : null;
+  const uniqueLinkToken =
+    mode === "external" ? crypto.randomBytes(24).toString("hex") : null;
 
   const submission = await prisma.customerSubmission.create({
     data: {
