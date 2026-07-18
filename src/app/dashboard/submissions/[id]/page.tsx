@@ -43,9 +43,9 @@ export default async function SubmissionDetailsPage({
       <div className="mt-6 rounded-lg border p-6 text-center">
         <div className="flex items-center justify-center gap-4">
           <span className="text-5xl font-bold">{score}</span>
-          <span className="text-xl text-gray-400">/ {maxScore}</span>
+          <span className="text-xl text-text-muted">/ {maxScore}</span>
         </div>
-        <p className="mt-1 text-sm text-gray-500">{pct}% overall</p>
+        <p className="mt-1 text-sm text-text-secondary">{pct}% overall</p>
         <div className="mx-auto mt-3 h-3 w-full max-w-xs rounded-full bg-gray-200">
           <div
             className={`h-3 rounded-full ${getBarColor(pct)}`}
@@ -58,7 +58,7 @@ export default async function SubmissionDetailsPage({
       {rec?.recommendation && (
         <div className="mt-6 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm whitespace-pre-line">
           <strong>Recommendation:</strong>
-          <p className="mt-1 text-blue-800">{rec.recommendation}</p>
+          <p className="mt-1 text-primary-300">{rec.recommendation}</p>
         </div>
       )}
 
@@ -69,13 +69,13 @@ export default async function SubmissionDetailsPage({
           {breakdown.map((b: any, i: number) => (
             <div
               key={i}
-              className="flex items-center justify-between rounded-lg border px-4 py-3"
+              className="flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-3"
             >
               <div className="flex-1">
                 <p className="text-sm font-medium">
                   {i + 1}. {b.questionText}
                 </p>
-                <p className="text-xs text-gray-500">Answer: {b.answer}</p>
+                <p className="text-xs text-text-muted">Answer: {b.answer}</p>
               </div>
               <div className="ml-4 text-right">
                 <span className="text-sm font-semibold">
@@ -91,7 +91,7 @@ export default async function SubmissionDetailsPage({
       {submission.answers && (
         <div className="mt-6">
           <h2 className="mb-3 text-lg font-semibold">Raw Answers</h2>
-          <pre className="overflow-auto rounded-lg border bg-gray-50 p-4 text-xs">
+          <pre className="overflow-auto rounded-xl border border-border bg-surface p-4 text-xs text-text-secondary">
             {JSON.stringify(submission.answers, null, 2)}
           </pre>
         </div>

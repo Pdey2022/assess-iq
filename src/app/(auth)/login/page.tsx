@@ -34,15 +34,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-50 via-white to-primary-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-surface-secondary px-4">
       <div className="w-full max-w-sm">
-        <div className="rounded-2xl border border-border bg-white p-8 shadow-card">
+        <div className="rounded-2xl border border-border bg-surface p-8 shadow-card">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 text-lg font-bold text-white shadow-sm">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 text-lg font-bold text-white shadow-lg">
               A
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-text">AssessIQ</h1>
-            <p className="mt-1 text-sm text-text-secondary">Sign in to your account</p>
+            <h1 className="text-2xl font-bold tracking-tight text-text">
+              AssessIQ
+            </h1>
+            <p className="mt-1 text-sm text-text-secondary">
+              Sign in to your account
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -80,7 +84,7 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+              <div className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-400">
                 {error}
               </div>
             )}
@@ -93,8 +97,8 @@ export default function LoginPage() {
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
-          </div>
         </div>
       </div>
+    </div>
   );
 }

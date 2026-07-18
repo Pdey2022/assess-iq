@@ -24,8 +24,12 @@ export default async function AssessmentsDashboardPage() {
   return (
     <div className="mx-auto max-w-5xl flex-1 p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-text">Assessments</h1>
-        <p className="mt-1 text-sm text-text-secondary">Launch, track, and review assessments</p>
+        <h1 className="text-3xl font-bold tracking-tight text-text">
+          Assessments
+        </h1>
+        <p className="mt-1 text-sm text-text-secondary">
+          Launch, track, and review assessments
+        </p>
       </div>
 
       {/* Tabs */}
@@ -46,9 +50,24 @@ export default async function AssessmentsDashboardPage() {
       {/* Active Templates */}
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {templates.map((t) => (
-          <div key={t.id} className="rounded-xl border border-border bg-white p-5 shadow-card transition-all hover:shadow-card-hover">
-            <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+          <div
+            key={t.id}
+            className="rounded-xl border border-border bg-surface p-5 shadow-card transition-all hover:shadow-card-hover"
+          >
+            <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary-500/10 text-primary-400">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
             </div>
             <h3 className="font-semibold text-text">{t.title}</h3>
             {t.description && (
@@ -71,7 +90,7 @@ export default async function AssessmentsDashboardPage() {
           </div>
         ))}
         {templates.length === 0 && (
-          <div className="col-span-full rounded-xl border border-dashed border-border bg-white p-12 text-center">
+          <div className="col-span-full rounded-xl border border-dashed border-border bg-surface p-12 text-center">
             <p className="text-text-secondary">
               No assessments yet.{" "}
               <Link

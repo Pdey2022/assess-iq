@@ -108,7 +108,9 @@ export default function UsersClient() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-text">User Management</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-text">
+            User Management
+          </h1>
           <p className="mt-1 text-sm text-text-secondary">
             Manage portal users and their roles
           </p>
@@ -117,7 +119,19 @@ export default function UsersClient() {
           onClick={openAdd}
           className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:from-primary-700 hover:to-primary-600 active:scale-[0.98]"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
           Add User
         </button>
       </div>
@@ -127,11 +141,11 @@ export default function UsersClient() {
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
         </div>
       ) : users.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-white p-12 text-center">
+        <div className="rounded-xl border border-dashed border-border bg-surface p-12 text-center">
           <p className="text-text-secondary">No users yet.</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-border bg-white shadow-card">
+        <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-card">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-surface-secondary">
@@ -154,17 +168,20 @@ export default function UsersClient() {
             </thead>
             <tbody className="divide-y divide-border">
               {users.map((u) => (
-                <tr key={u.id} className="transition-colors hover:bg-surface-secondary">
+                <tr
+                  key={u.id}
+                  className="transition-colors hover:bg-surface-secondary"
+                >
                   <td className="px-5 py-4 font-medium text-text">{u.name}</td>
                   <td className="px-5 py-4 text-text-secondary">{u.email}</td>
                   <td className="px-5 py-4">
                     <span
                       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                         u.role === "admin"
-                          ? "bg-primary-50 text-primary-700"
+                          ? "bg-primary-500/20 text-primary-300"
                           : u.role === "viewer"
-                          ? "bg-amber-50 text-amber-700"
-                          : "bg-surface-secondary text-text-secondary"
+                            ? "bg-amber-500/10 text-amber-400"
+                            : "bg-surface-hover text-text-secondary"
                       }`}
                     >
                       {u.role}
@@ -197,19 +214,36 @@ export default function UsersClient() {
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-white p-6 shadow-modal">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-modal">
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-lg font-bold text-text">
                 {editing ? "Edit User" : "Add User"}
               </h2>
-              <button onClick={() => setShowModal(false)} className="rounded-lg p-1 text-text-muted hover:bg-surface-secondary hover:text-text">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              <button
+                onClick={() => setShowModal(false)}
+                className="rounded-lg p-1 text-text-muted hover:bg-surface-hover hover:text-text"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-text">Name</label>
+                <label className="block text-sm font-medium text-text">
+                  Name
+                </label>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -218,7 +252,9 @@ export default function UsersClient() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-text">Email</label>
+                <label className="block text-sm font-medium text-text">
+                  Email
+                </label>
                 <input
                   type="email"
                   value={email}
@@ -245,7 +281,9 @@ export default function UsersClient() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-text">Role</label>
+                <label className="block text-sm font-medium text-text">
+                  Role
+                </label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
@@ -257,12 +295,16 @@ export default function UsersClient() {
                 </select>
               </div>
 
-              {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</div>}
+              {error && (
+                <div className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-400">
+                  {error}
+                </div>
+              )}
 
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-secondary"
+                  className="rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-hover"
                 >
                   Cancel
                 </button>

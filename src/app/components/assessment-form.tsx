@@ -83,13 +83,13 @@ export default function AssessmentForm({
     return (
       <div className="space-y-6">
         {/* Score Card */}
-        <div className="rounded-lg border p-6 text-center">
+        <div className="rounded-xl border border-border bg-surface p-6 text-center">
           <h2 className="text-xl font-bold">Assessment Results</h2>
           <div className="mt-4 flex items-center justify-center gap-4">
             <span className="text-5xl font-bold">{score}</span>
-            <span className="text-xl text-gray-400">/ {maxScore}</span>
+            <span className="text-xl text-text-muted">/ {maxScore}</span>
           </div>
-          <p className="mt-1 text-sm text-gray-500">{pct}% overall</p>
+          <p className="mt-1 text-sm text-text-secondary">{pct}% overall</p>
           <div className="mx-auto mt-3 h-3 w-full max-w-xs rounded-full bg-gray-200">
             <div
               className={`h-3 rounded-full ${getBarColor(pct)}`}
@@ -100,9 +100,9 @@ export default function AssessmentForm({
 
         {/* Recommendation */}
         {rec && (
-          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm whitespace-pre-line">
+          <div className="rounded-xl border border-primary-500/20 bg-primary-500/5 p-4 text-sm whitespace-pre-line">
             <strong>Recommendation:</strong>
-            <p className="mt-1 text-blue-800">{rec}</p>
+            <p className="mt-1 text-primary-300">{rec}</p>
           </div>
         )}
 
@@ -113,13 +113,13 @@ export default function AssessmentForm({
             {breakdown.map((b: any, i: number) => (
               <div
                 key={i}
-                className="flex items-center justify-between rounded-lg border px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-3"
               >
                 <div className="flex-1">
                   <p className="text-sm font-medium">
                     {i + 1}. {b.questionText}
                   </p>
-                  <p className="text-xs text-gray-500">Answer: {b.answer}</p>
+                  <p className="text-xs text-text-muted">Answer: {b.answer}</p>
                 </div>
                 <div className="ml-4 text-right">
                   <span className="text-sm font-semibold">
@@ -148,7 +148,7 @@ export default function AssessmentForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {questions.map((q, idx) => (
-        <div key={q.id} className="rounded-lg border p-4">
+        <div key={q.id} className="rounded-xl border border-border bg-surface p-4">
           <p className="mb-2 font-medium">
             {idx + 1}. {q.text}
             {q.required && <span className="ml-1 text-red-500">*</span>}
@@ -236,7 +236,7 @@ export default function AssessmentForm({
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          className="rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-2.5 text-sm font-semibold text-white shadow-card hover:from-primary-700 hover:to-primary-600 disabled:opacity-50"
         >
           {submitting ? "Submitting..." : "Submit Assessment"}
         </button>

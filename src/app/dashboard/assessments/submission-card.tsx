@@ -11,20 +11,24 @@ export default function SubmissionCard({
   const rec = submission.recommendationReport as any;
 
   return (
-    <div className="rounded-xl border border-border bg-white p-5 shadow-card transition-all hover:shadow-card-hover">
+    <div className="rounded-xl border border-border bg-surface p-5 shadow-card transition-all hover:shadow-card-hover">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <h3 className="font-semibold text-text">
             {submission.assessmentDefinition.title}
           </h3>
           <div className="mt-1 flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 text-[10px] font-semibold text-primary-700">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-500/20 text-[10px] font-semibold text-primary-300">
               {submission.customerName[0]}
             </div>
-            <p className="text-sm font-medium text-text-secondary">{submission.customerName}</p>
+            <p className="text-sm font-medium text-text-secondary">
+              {submission.customerName}
+            </p>
           </div>
           {submission.customerEmail && (
-            <p className="mt-0.5 text-xs text-text-muted">{submission.customerEmail}</p>
+            <p className="mt-0.5 text-xs text-text-muted">
+              {submission.customerEmail}
+            </p>
           )}
         </div>
         <div className="ml-4 text-right">
@@ -33,7 +37,9 @@ export default function SubmissionCard({
               <span className="text-xl font-bold text-text">{rec.score}</span>
               <span className="text-xs text-text-muted"> / {rec.maxScore}</span>
               {rec.percentage !== undefined && (
-                <p className="text-xs font-medium text-text-secondary">{rec.percentage}%</p>
+                <p className="text-xs font-medium text-text-secondary">
+                  {rec.percentage}%
+                </p>
               )}
             </div>
           )}
@@ -48,12 +54,18 @@ export default function SubmissionCard({
         </div>
       </div>
       <div className="mt-3 flex items-center gap-3 border-t border-border pt-3 text-xs">
-        <span className={`rounded-full px-2 py-0.5 font-medium ${
-          isInProgress ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"
-        }`}>
+        <span
+          className={`rounded-full px-2 py-0.5 font-medium ${
+            isInProgress
+              ? "bg-amber-50 text-amber-700"
+              : "bg-emerald-50 text-emerald-700"
+          }`}
+        >
           {submission.status}
         </span>
-        <span className="text-text-muted">{new Date(submission.updatedAt).toLocaleDateString()}</span>
+        <span className="text-text-muted">
+          {new Date(submission.updatedAt).toLocaleDateString()}
+        </span>
         {showScore && (
           <>
             <span className="text-border">&middot;</span>
