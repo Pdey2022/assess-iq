@@ -4,7 +4,8 @@ import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "AssessIQ — Assessment Portal",
-  description: "Dynamic assessment engine with automated scoring and recommendations",
+  description:
+    "Dynamic assessment engine with automated scoring and recommendations",
 };
 
 export default function RootLayout({

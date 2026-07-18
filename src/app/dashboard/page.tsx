@@ -1,28 +1,36 @@
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import SignOutButton from "./sign-out-button";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 export default async function DashboardPage() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
+  const totalAssessments = await prisma.assessmentDefinition.count();
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="flex items-center justify-between border-b px-6 py-4">
-        <h1 className="text-xl font-bold">AssessIQ</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-600">
-            {session.user.name} ({session.user.email})
-          </span>
-          <SignOutButton />
-        </div>
-      </header>
+    <div className="flex-1 p-6">
+      <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
 
-      <main className="flex flex-1 items-center justify-center">
-        <p className="text-lg text-gray-500">
-          Welcome to AssessIQ — you&apos;re logged in!
-        </p>
-      </main>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-lg border p-4">
+          <p className="text-sm text-gray-500">Assessment Templates</p>
+          <p className="mt-1 text-3xl font-bold">{totalAssessments}</p>
+        </div>
+        <div className="rounded-lg border p-4">
+          <p className="text-sm text-gray-500">In Progress</p>
+          <p className="mt-1 text-3xl font-bold">0</p>
+        </div>
+        <div className="rounded-lg border p-4">
+          <p className="text-sm text-gray-500">Delivered</p>
+          <p className="mt-1 text-3xl font-bold">0</p>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <Link
+          href="/dashboard/settings/assessments"
+          className="inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+        >
+          Go to Assessment Builder
+        </Link>
+      </div>
     </div>
   );
 }
