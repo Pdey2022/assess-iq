@@ -29,7 +29,9 @@ export default function UsersClient() {
     setLoading(false);
   }
 
-  useEffect(() => { loadUsers(); }, []);
+  useEffect(() => {
+    loadUsers();
+  }, []);
 
   function openAdd() {
     setEditing(null);
@@ -52,8 +54,14 @@ export default function UsersClient() {
   }
 
   async function handleSave() {
-    if (!name.trim() || !email.trim()) { setError("Name and email are required"); return; }
-    if (!editing && !password) { setError("Password is required for new users"); return; }
+    if (!name.trim() || !email.trim()) {
+      setError("Name and email are required");
+      return;
+    }
+    if (!editing && !password) {
+      setError("Password is required for new users");
+      return;
+    }
 
     setSaving(true);
     setError("");
@@ -64,7 +72,12 @@ export default function UsersClient() {
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: name.trim(), email: email.trim(), password, role }),
+      body: JSON.stringify({
+        name: name.trim(),
+        email: email.trim(),
+        password,
+        role,
+      }),
     });
 
     if (!res.ok) {
@@ -95,55 +108,82 @@ export default function UsersClient() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">User Management</h1>
-          <p className="text-sm text-gray-500">Manage portal users and their roles</p>
+          <h1 className="text-2xl font-bold tracking-tight text-text">User Management</h1>
+          <p className="mt-1 text-sm text-text-secondary">
+            Manage portal users and their roles
+          </p>
         </div>
         <button
           onClick={openAdd}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:from-primary-700 hover:to-primary-600 active:scale-[0.98]"
         >
-          + Add User
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+          Add User
         </button>
       </div>
 
       {loading ? (
-        <p className="text-sm text-gray-400">Loading...</p>
+        <div className="flex items-center justify-center py-12">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
+        </div>
       ) : users.length === 0 ? (
-        <div className="rounded-lg border border-dashed p-12 text-center">
-          <p className="text-gray-500">No users yet.</p>
+        <div className="rounded-xl border border-dashed border-border bg-white p-12 text-center">
+          <p className="text-text-secondary">No users yet.</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border">
+        <div className="overflow-hidden rounded-xl border border-border bg-white shadow-card">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Name</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Email</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Role</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Created</th>
-                <th className="px-4 py-3 text-right font-medium text-gray-600">Actions</th>
+            <thead>
+              <tr className="border-b border-border bg-surface-secondary">
+                <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  Name
+                </th>
+                <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  Email
+                </th>
+                <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  Role
+                </th>
+                <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  Created
+                </th>
+                <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody className="divide-y">
+            <tbody className="divide-y divide-border">
               {users.map((u) => (
-                <tr key={u.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium">{u.name}</td>
-                  <td className="px-4 py-3 text-gray-600">{u.email}</td>
-                  <td className="px-4 py-3">
-                    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                      u.role === "admin" ? "bg-purple-100 text-purple-700" : "bg-gray-100 text-gray-600"
-                    }`}>
+                <tr key={u.id} className="transition-colors hover:bg-surface-secondary">
+                  <td className="px-5 py-4 font-medium text-text">{u.name}</td>
+                  <td className="px-5 py-4 text-text-secondary">{u.email}</td>
+                  <td className="px-5 py-4">
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        u.role === "admin"
+                          ? "bg-primary-50 text-primary-700"
+                          : u.role === "viewer"
+                          ? "bg-amber-50 text-amber-700"
+                          : "bg-surface-secondary text-text-secondary"
+                      }`}
+                    >
                       {u.role}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500">
+                  <td className="px-5 py-4 text-text-muted">
                     {new Date(u.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <button onClick={() => openEdit(u)} className="mr-2 text-blue-600 hover:text-blue-800 text-xs font-medium">
+                  <td className="px-5 py-4 text-right">
+                    <button
+                      onClick={() => openEdit(u)}
+                      className="mr-3 text-xs font-semibold text-primary-600 transition-colors hover:text-primary-800"
+                    >
                       Edit
                     </button>
-                    <button onClick={() => handleDelete(u)} className="text-red-500 hover:text-red-700 text-xs font-medium">
+                    <button
+                      onClick={() => handleDelete(u)}
+                      className="text-xs font-semibold text-red-500 transition-colors hover:text-red-700"
+                    >
                       Delete
                     </button>
                   </td>
@@ -156,47 +196,60 @@ export default function UsersClient() {
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="mb-4 text-lg font-bold">
-              {editing ? "Edit User" : "Add User"}
-            </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-white p-6 shadow-modal">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-text">
+                {editing ? "Edit User" : "Add User"}
+              </h2>
+              <button onClick={() => setShowModal(false)} className="rounded-lg p-1 text-text-muted hover:bg-surface-secondary hover:text-text">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <label className="block text-sm font-medium text-text">Name</label>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full rounded-lg border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  placeholder="Full name"
+                  className="mt-1.5 block w-full rounded-xl border border-border px-3.5 py-2.5 text-sm shadow-sm transition-colors placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <label className="block text-sm font-medium text-text">Email</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full rounded-lg border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  placeholder="user@example.com"
+                  className="mt-1.5 block w-full rounded-xl border border-border px-3.5 py-2.5 text-sm shadow-sm transition-colors placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Password {editing && <span className="text-gray-400">(leave blank to keep current)</span>}
+                <label className="block text-sm font-medium text-text">
+                  Password
+                  {editing && (
+                    <span className="ml-1 font-normal text-text-muted">
+                      (leave blank to keep current)
+                    </span>
+                  )}
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 block w-full rounded-lg border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  placeholder={editing ? "New password (optional)" : "Password"}
+                  className="mt-1.5 block w-full rounded-xl border border-border px-3.5 py-2.5 text-sm shadow-sm transition-colors placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Role</label>
+                <label className="block text-sm font-medium text-text">Role</label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="mt-1 block w-full rounded-lg border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  className="mt-1.5 block w-full rounded-xl border border-border px-3.5 py-2.5 text-sm shadow-sm transition-colors focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                 >
                   <option value="editor">Editor</option>
                   <option value="admin">Admin</option>
@@ -204,19 +257,19 @@ export default function UsersClient() {
                 </select>
               </div>
 
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</div>}
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-3 pt-2">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-50"
+                  className="rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                  className="rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:from-primary-700 hover:to-primary-600 active:scale-[0.98] disabled:opacity-50"
                 >
                   {saving ? "Saving..." : "Save"}
                 </button>

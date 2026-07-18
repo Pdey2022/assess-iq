@@ -20,7 +20,7 @@ export default async function AssessmentsPage() {
         </div>
         <Link
           href="/dashboard/settings/assessments/new"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+          className="rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:from-primary-700 hover:to-primary-600 active:scale-[0.98]"
         >
           + New Assessment
         </Link>

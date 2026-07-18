@@ -11,49 +11,55 @@ export default function SubmissionCard({
   const rec = submission.recommendationReport as any;
 
   return (
-    <div className="rounded-lg border p-4">
+    <div className="rounded-xl border border-border bg-white p-5 shadow-card transition-all hover:shadow-card-hover">
       <div className="flex items-start justify-between">
-        <div>
-          <h3 className="font-semibold">
+        <div className="flex-1">
+          <h3 className="font-semibold text-text">
             {submission.assessmentDefinition.title}
           </h3>
-          <p className="text-sm text-gray-500">{submission.customerName}</p>
+          <div className="mt-1 flex items-center gap-2">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 text-[10px] font-semibold text-primary-700">
+              {submission.customerName[0]}
+            </div>
+            <p className="text-sm font-medium text-text-secondary">{submission.customerName}</p>
+          </div>
           {submission.customerEmail && (
-            <p className="text-xs text-gray-400">{submission.customerEmail}</p>
+            <p className="mt-0.5 text-xs text-text-muted">{submission.customerEmail}</p>
           )}
         </div>
-        <div className="text-right">
+        <div className="ml-4 text-right">
           {showScore && rec && (
             <div>
-              <span className="text-lg font-bold">{rec.score}</span>
-              <span className="text-xs text-gray-400"> / {rec.maxScore}</span>
+              <span className="text-xl font-bold text-text">{rec.score}</span>
+              <span className="text-xs text-text-muted"> / {rec.maxScore}</span>
               {rec.percentage !== undefined && (
-                <p className="text-xs text-gray-500">{rec.percentage}%</p>
+                <p className="text-xs font-medium text-text-secondary">{rec.percentage}%</p>
               )}
             </div>
           )}
           {isInProgress && (
             <Link
               href={`/dashboard/assessments/fill/${submission.id}`}
-              className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+              className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:from-primary-700 hover:to-primary-600"
             >
               Continue
             </Link>
           )}
         </div>
       </div>
-      <div className="mt-2 flex items-center gap-3 text-xs text-gray-400">
-        <span className={isInProgress ? "text-yellow-600" : "text-green-600"}>
+      <div className="mt-3 flex items-center gap-3 border-t border-border pt-3 text-xs">
+        <span className={`rounded-full px-2 py-0.5 font-medium ${
+          isInProgress ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"
+        }`}>
           {submission.status}
         </span>
-        <span>&middot;</span>
-        <span>{new Date(submission.updatedAt).toLocaleDateString()}</span>
+        <span className="text-text-muted">{new Date(submission.updatedAt).toLocaleDateString()}</span>
         {showScore && (
           <>
-            <span>&middot;</span>
+            <span className="text-border">&middot;</span>
             <Link
               href={`/dashboard/submissions/${submission.id}`}
-              className="text-blue-600 underline"
+              className="font-medium text-primary-600 underline-offset-2 hover:underline"
             >
               View Details
             </Link>

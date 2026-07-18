@@ -436,7 +436,7 @@ export default function AssessmentEditor({ initialData, onSave }: Props) {
         <button
           type="submit"
           disabled={saving || !title.trim()}
-          className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          className="rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:from-primary-700 hover:to-primary-600 active:scale-[0.98] disabled:opacity-50"
         >
           {saving ? "Saving..." : "Save Assessment"}
         </button>

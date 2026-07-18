@@ -58,7 +58,7 @@ export default function LaunchButton({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+        className="rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:from-primary-700 hover:to-primary-600"
       >
         Launch
       </button>
