@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/require-auth";
-import type { AssessmentDefinition } from "@/generated/prisma/client";
+import type { AssessmentDefinition } from "@prisma/client";
 
 export default async function AssessmentsPage() {
   await requireAuth();
